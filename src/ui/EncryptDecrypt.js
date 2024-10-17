@@ -1,153 +1,163 @@
+// EncryptDecrypt.js
 import {
-    Row,
-    InputNumber,
-    Input,
-    Button,
-    Tooltip,
-    Typography,
-    Flex,
-  } from "antd";
-  import React, { useState } from "react";
-  import SmoothTextInput from "./SmoothText";
-  
-  import { InfoOutlined } from "@ant-design/icons";
-  import lodash from "lodash";
-  const { Title } = Typography;
-  
-  /**
-   *
-   * @param {Function} encode
-   * @param {Function} decode
-   * @param {number/string} keyComponentA
-   * @param {number/string} keyComponentB
-   * @returns
-   */
-  export default function CipherFactory({
-    title = "Cipher Name",
-    setShowOverview,
-    encode,
-    decode,
-    keyComponentA,
-    keyComponentB,
-  }) {
-    const [leftText, setLeftText] = useState("");
-    const [rightText, setRightText] = useState("");
-    const [shift1, setShift1] = useState(keyComponentA == "STR" ? "" : 0);
-    const [shift2, setShift2] = useState(keyComponentB == "STR" ? "" : 0);
-  
-    // For Interactive pages which automatically changes when keys are changed
-    const setKey1 = (userKeyInput) => {
-      let text =
-        keyComponentA == "STR" ? userKeyInput.target.value : userKeyInput;
-      keyComponentA == "STR" ? setShift1(text) : setShift1(Number(text));
-      setRightText(encode(leftText, text, shift2));
-    };
-    const setKey2 = (userKeyInput) => {
-      keyComponentB == "STR"
-        ? setShift2(userKeyInput)
-        : setShift2(Number(userKeyInput));
-      setRightText(encode(leftText, shift1, userKeyInput));
-    };
-  
-    const handleLeftTextChange = (event) => {
-      let text = event.target.value;
-      setLeftText(text);
-      setRightText(encode(text, shift1, shift2));
-    };
-  
-    const handleRightTextChange = (event) => {
-      let text = event.target.value;
-      setRightText(text);
-      setLeftText(decode(text, shift1, shift2));
-    };
-  
-    return (
-      <>
-        <Flex vertical={false} justify="center" align="center" gap="small">
-          <Title
-            underline
-            level={1}
-            type={lodash.sample(["danger", "success", "warning"])}
-          >
+  Row,
+  InputNumber,
+  Input,
+  Button,
+  Tooltip,
+  Typography,
+  Space,
+  Card,
+} from "antd";
+import React, { useState } from "react";
+import SmoothTextInput from "./SmoothText";
+import { InfoOutlined } from "@ant-design/icons";
+import "./EncryptDecrypt.css";
+
+const { Title } = Typography;
+
+export default function CipherFactory({
+  title = "Cipher Name",
+  setShowOverview,
+  encode,
+  decode,
+  keyComponentA,
+  keyComponentB,
+  explanation, // New prop for explanations
+}) {
+  const [leftText, setLeftText] = useState("");
+  const [rightText, setRightText] = useState("");
+  const [shift1, setShift1] = useState(keyComponentA === "STR" ? "" : 0);
+  const [shift2, setShift2] = useState(keyComponentB === "STR" ? "" : 0);
+
+  const setKey1 = (userKeyInput) => {
+    let text =
+      keyComponentA === "STR" ? userKeyInput.target.value : userKeyInput;
+    const newShift1 = keyComponentA === "STR" ? text : Number(userKeyInput);
+    setShift1(newShift1);
+    // Update ciphered text with new key
+    setRightText(encode(leftText, newShift1, shift2));
+  };
+
+  const setKey2 = (userKeyInput) => {
+    const newKey2 =
+      keyComponentB === "STR"
+        ? userKeyInput.target.value
+        : Number(userKeyInput);
+    setShift2(newKey2);
+    // Update ciphered text with new key
+    setRightText(encode(leftText, shift1, newKey2));
+  };
+
+  const handleLeftTextChange = (event) => {
+    let text = event.target.value;
+    setLeftText(text);
+    setRightText(encode(text, shift1, shift2));
+  };
+
+  const handleRightTextChange = (event) => {
+    let text = event.target.value;
+    setRightText(text);
+    setLeftText(decode(text, shift1, shift2));
+  };
+
+  return (
+    <Card className="cipher-container">
+      <div className="header">
+        <Space
+          direction="horizontal"
+          align="center"
+          className="title-tooltip-container"
+        >
+          <Title level={1} className="cipher-title">
             {title}
           </Title>
-          <Tooltip title="overview">
+          <Tooltip title="Click to view overview">
             <Button
-              type="default"
+              type="primary"
               shape="circle"
-              size="small"
-              style={{backgroundColor:'whitesmoke', marginTop:15, border:"1px solid grey"}}
+              size="medium"
+              className="info-button"
               icon={<InfoOutlined />}
-              onClick={() => {
-                setShowOverview(true);
-              }}
+              onClick={() => setShowOverview(true)}
             />
           </Tooltip>
-        </Flex>
+        </Space>
+      </div>
+
+      <div className="key-inputs">
         {keyComponentA && (
-          <Row style={{ display: "flex", padding: "10px 10px 10px 0px" }}>
-            {keyComponentA == "STR" ? (
+          <Row className="input-secret-key-row">
+            {keyComponentA === "STR" ? (
               <Input
-                style={{ flex: 0.5 }}
-                addonAfter="Cipher Key"
-                placeholder="SecretKey"
+                addonAfter="Cipher Key A"
+                placeholder="Enter Key A"
                 value={shift1}
-                size="large"
                 onChange={setKey1}
+                className="input-secret-key"
               />
             ) : (
               <InputNumber
-                style={{ flex: 0.4 }}
-                addonBefore="Cipher Key A:"
+                addonBefore="Cipher Key A"
                 placeholder="Shift value"
                 value={shift1}
-                size="large"
                 onChange={setKey1}
+                className="input-secret-key-number"
               />
             )}
           </Row>
         )}
         {keyComponentB && (
-          <Row style={{ display: "flex", padding: "10px 10px 10px 0px" }}>
-            {keyComponentB == "STR" ? (
+          <Row className="input-secret-key-row">
+            {keyComponentB === "STR" ? (
               <Input
-                style={{ flex: 0.5 }}
-                addonAfter="Cipher Key B:"
-                placeholder="SecretKey"
+                addonAfter="Cipher Key B"
+                placeholder="Enter Key B"
                 value={shift2}
-                size="large"
                 onChange={setKey2}
+                className="input-secret-key"
               />
             ) : (
               <InputNumber
-                style={{ flex: 0.4 }}
-                addonBefore="Cipher Key B:"
+                addonBefore="Cipher Key B"
                 placeholder="Shift value"
                 value={shift2}
-                size="large"
                 onChange={setKey2}
+                className="input-secret-key-number"
               />
             )}
           </Row>
         )}
-  
-        <Row style={{ display: "flex" }}>
-          <SmoothTextInput
-            value={leftText}
-            isLeft={true}
-            onChange={handleLeftTextChange}
-            placeholder="Enter text to Encrypt"
-          />
-          <SmoothTextInput
-            value={rightText}
-            isLeft={false}
-            onChange={handleRightTextChange}
-            placeholder="Enter text to Decrypt"
-          />
-        </Row>
-  
-        <Row style={{ display: "flex", flexDirection: "column" }}></Row>
-      </>
-    );
-  }
-  
+      </div>
+
+      <Row className="text-inputs">
+        <SmoothTextInput
+          value={leftText}
+          isLeft={true}
+          onChange={handleLeftTextChange}
+          placeholder="Enter text to Encrypt"
+          className="text-input"
+        />
+        <SmoothTextInput
+          value={rightText}
+          isLeft={false}
+          onChange={handleRightTextChange}
+          placeholder="Enter text to Decrypt"
+          className="text-input"
+        />
+      </Row>
+
+      {/* Dynamic Explanation Section */}
+      {explanation && explanation.length > 0 && (
+        <div className="explanation-section">
+          <Title level={3}>Encryption Explanation:</Title>
+          <ul>
+            {explanation.map((exp, index) => (
+              <li key={index}>{exp}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </Card>
+  );
+}

@@ -1,5 +1,5 @@
-import React from "react";
-import { Divider, Flex, Button } from "antd";
+import React, { useEffect, useRef } from "react";
+import { Divider, Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import "./CipherOverview.css";
 
@@ -10,30 +10,88 @@ const CipherOverview = ({
   Example,
   References,
 }) => {
+  const modalRef = useRef(null);
+
   const closeModal = () => {
     setShowOverview(false);
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") {
+      closeModal();
+    }
+  };
+
+  useEffect(() => {
+    // Focus the modal when it opens
+    if (modalRef.current) {
+      modalRef.current.focus();
+    }
+
+    // Add event listener for keydown
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Prevent background scrolling
+    document.body.style.overflow = "hidden";
+
+    // Cleanup on unmount
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <div className="modal">
-      <div className="modal-overlay">
-        <Flex vertical={false} align="center" justify="space-between"> 
-          <Header />
+    <div
+      className="modal"
+      onClick={closeModal}
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="cipher-overview-title"
+      style={{
+        fontFamily: "Poppins",
+      }}
+    >
+      <div
+        className="modal-overlay"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+        ref={modalRef}
+        tabIndex="-1"
+      >
+        <div className="modal-header">
+          <Header id="cipher-overview-title" />
           <Button
             type="text"
             icon={<LeftOutlined />}
-            iconPosition={"left"}
             shape="round"
             onClick={closeModal}
+            className="back-button"
           >
             Back
           </Button>
-        </Flex>
-        <Divider>Description</Divider>
+        </div>
+        <Divider
+          className="divider"
+          style={{ borderColor: "#bdbebf", color: "#1890ff" }}
+        >
+          Description
+        </Divider>
+
         <Description />
-        <Divider>Example</Divider>
+        <Divider
+          className="divider"
+          style={{ borderColor: "#bdbebf", color: "#1890ff" }}
+        >
+          Example
+        </Divider>
         <Example />
-        <Divider>References</Divider>
-        <References />
+        <Divider
+          className="divider"
+          style={{ borderColor: "#bdbebf", color: "#1890ff" }}
+        >
+          References
+        </Divider>
+        <References style={{ color: "red" }} />
       </div>
     </div>
   );

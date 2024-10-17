@@ -1,23 +1,221 @@
+/* Import Google Fonts for better typography */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+
+/* Modal container */
 .modal {
-    position: fixed; /* Ensures modal stays on top */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-    z-index: 10; /* Higher than other elements */
+  position: fixed; /* Ensures modal stays on top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Slightly darker overlay for better contrast */
+  z-index: 1000; /* Higher than other elements */
+  animation: fadeIn 0.3s ease-out;
+}
+
+.ant-typography,
+.ant-divider-inner-text {
+  font-family: "Poppins", sans-serif !important;
+}
+
+/* Change font size for Text component */
+.ant-typography {
+  font-size: 16px; /* You can adjust this size as needed */
+  line-height: 1.9;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  width: 95%;
+  max-width: 800px;
+  height: auto; /* Allow height to adjust based on content */
+  max-height: 90%; /* Prevent modal from exceeding viewport height */
+  border-radius: 12px; /* Increased border radius for a softer look */
+  background-color: #ffffff;
+  padding: 30px 50px 40px 50px; /* Increased padding for better spacing */
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+  animation: slideIn 0.3s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for interactive changes */
+}
+
+/* Header styling */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  font-family: "Poppins";
+}
+
+/* Header left (e.g., title) */
+.header-left {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333333;
+}
+
+/* Header right (buttons) */
+.header-right {
+  display: flex;
+  gap: 12px;
+}
+
+/* Back button styling */
+.back-button {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 44px;
+  font-size: 15px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.back-button:active {
+  background-color: #d0d0d0;
+  transform: translateY(0);
+}
+
+/* Close button styling */
+.close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: #e0e0e0;
+  transform: rotate(90deg);
+}
+
+.close-button:active {
+  background-color: #d0d0d0;
+  transform: rotate(0deg);
+}
+
+/* Divider styling */
+.divider {
+  margin: 25px 0;
+  border: none;
+  border-top: 1px solid #d9d9d9;
+}
+
+/* General text styling */
+.modal-overlay p {
+  font-size: 16px;
+  color: #555555;
+  line-height: 1.8 !important;
+  margin-bottom: 1em;
+}
+
+/* Button styling (if any additional buttons are present) */
+.button {
+  padding: 12px 24px;
+  font-size: 15px;
+  color: #ffffff;
+  background-color: #1890ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: #40a9ff;
+  transform: translateY(-2px);
+}
+
+.button:active {
+  background-color: #096dd9;
+  transform: translateY(0);
+}
+
+/* Animation for modal entrance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.css-dev-only-do-not-override-1okl62o {
+  font-family: "Poppins", sans-serif !important;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
   .modal-overlay {
-    width: 95%;
-    height: 90%;
-    border-radius: 10px;
-    background-color: #ffffff; 
-    padding: 10px 50px 50px 50px;
-    overflow-y:scroll ;
+    width: 90%;
+    padding: 25px 30px 35px 30px;
   }
-  
-  
+
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-left {
+    font-size: 1.3rem;
+  }
+
+  .back-button {
+    padding: 0 12px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .close-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .divider {
+    margin: 20px 0;
+  }
+
+  .modal-overlay p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+}

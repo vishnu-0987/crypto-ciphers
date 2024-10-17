@@ -3,16 +3,15 @@ import React, { useState } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
 
-import { Header,
-    Description,
+import {
+  Header,
+  Description,
   References,
   Example,
- } from "../../overviews/AtbashOverview";
-
+} from "../../overviews/AtbashOverview";
 
 export default function AtbashEncoder() {
-
-    //Add this line in every cipher.
+  //Add this line in every cipher.
   const [showOverview, setShowOverview] = useState(false);
   const encode = (text) => {
     let encoded = "";
@@ -48,7 +47,7 @@ export default function AtbashEncoder() {
       )}
       <CipherFactory
         title={"Atbash Cipher"}
-        setShowOverview = {setShowOverview}
+        setShowOverview={setShowOverview}
         encode={encode}
         decode={decode}
       />

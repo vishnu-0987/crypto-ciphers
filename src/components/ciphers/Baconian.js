@@ -1,9 +1,17 @@
-import React from 'react';
-import CipherFactory from '../../ui/EncryptDecrypt';
+import React from "react";
+import CipherFactory from "../../ui/EncryptDecrypt";
+
+import CipherOverview from "../../ui/CipherOverview";
+import {
+  Header,
+  Description,
+  Example,
+  References,
+} from "../../overviews/BaconianOverview";
 
 export default function BaconianCipher() {
-
   // Encryption function for Baconian Cipher
+  const [showOverview, setShowOverview] = React.useState(false);
   function baconianEncrypt(plaintext) {
     // Define the Baconian Cipher lookup table
     const baconianTable = {
@@ -32,7 +40,7 @@ export default function BaconianCipher() {
       W: "BABBA",
       X: "BABBB",
       Y: "BBAAA",
-      Z: "BBAAB"
+      Z: "BBAAB",
     };
 
     // Convert plaintext to uppercase and remove any spaces
@@ -86,7 +94,7 @@ export default function BaconianCipher() {
       BABBA: "W",
       BABBB: "X",
       BBAAA: "Y",
-      BBAAB: "Z"
+      BBAAB: "Z",
     };
 
     // Initialize the plaintext variable
@@ -110,7 +118,24 @@ export default function BaconianCipher() {
 
     return plaintext;
   }
-  
-  
-  return <CipherFactory encode={baconianEncrypt} decode={baconianDecrypt} />
-};
+
+  return (
+    <>
+      {showOverview && (
+        <CipherOverview
+          setShowOverview={setShowOverview}
+          Header={Header}
+          Description={Description}
+          Example={Example}
+          References={References}
+        />
+      )}
+      <CipherFactory
+        title={"Baconian Cipher"}
+        setShowOverview={setShowOverview}
+        encode={baconianEncrypt}
+        decode={baconianDecrypt}
+      />
+    </>
+  );
+}
