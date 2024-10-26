@@ -1,24 +1,38 @@
 import React, { useState } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
-import { Header, Description, References, Example } from "../../overviews/NullCipherOverview";
+import {
+  Header,
+  Description,
+  References,
+  Example,
+} from "../../overviews/NullCipherOverview";
 
 export default function NullCipher(props) {
   const [showOverview, setShowOverview] = useState(false);
-  const [inputText, setInputText] = useState('');
-  const [inputChars, setInputChars] = useState([]);
-  const [outputChars, setOutputChars] = useState([]);
+  const [explanation, setExplanation] = useState([]); // Explanation state
 
   // Function to encode using the Null cipher (combine first letters)
   const encode = (text) => {
-    const words = text.split(' ');
+    const words = text.split(" ");
+    const explanations = []; // Temporary array to hold explanations
+
     const combinedLetters = words.reduce((acc, word) => {
       if (word.length > 0) {
-        return acc + word.charAt(0).toUpperCase();
+        const firstLetter = word.charAt(0).toUpperCase();
+        // Add explanation for the current word
+        explanations.push(
+          `<strong>'${firstLetter}'</strong> from <strong>'${word}'</strong></br>`
+        );
+        return acc + firstLetter;
       } else {
         return acc;
       }
-    }, '');
+    }, "");
+
+    // Update the explanation state with the latest explanations
+    setExplanation(explanations);
+
     return combinedLetters;
   };
 
@@ -44,7 +58,7 @@ export default function NullCipher(props) {
         setShowOverview={setShowOverview}
         encode={encode}
         decode={decode}
-   
+        explanation={explanation} // Pass the explanations to the CipherFactory
       />
     </>
   );

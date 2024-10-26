@@ -16,11 +16,11 @@
 // //         'J': 'ᛠ', 'K': 'ᛡ', 'L': 'ᛢ', 'M': 'ᛣ', 'N': 'ᛤ', 'O': 'ᛥ', 'P': 'ᛦ', 'Q': 'ᛧ', 'R': 'ᛨ',
 // //         'S': 'ᛩ', 'T': 'ᛪ', 'U': '᛫', 'V': '᛬', 'W': '᛭', 'X': 'ᛮ', 'Y': 'ᛯ', 'Z': 'ᛰ'
 // //     };
-    
+
 // //     const reversePigpenCipher = Object.fromEntries(
 // //         Object.entries(pigpenCipher).map(([letter, symbol]) => [symbol, letter])
 // //     );
-      
+
 // //     function encode(plaintext) {
 // //         return plaintext.toUpperCase().replace(/[^A-Z]/g, '').split('').map(char => pigpenCipher[char] || char).join('');
 // //     }
@@ -28,13 +28,9 @@
 // //     function decode(ciphertext) {
 // //         return ciphertext.split('').map(symbol => reversePigpenCipher[symbol] || symbol).join('');
 // //     }
-     
 
-  
 // //       return <CipherFactory encode={encode} decode={decode} />
 // // };
-
-
 
 // import React, { useState, useEffect } from 'react';
 // import CipherFactory from '../../ui/EncryptDecrypt';
@@ -140,18 +136,44 @@
 import React, { useState } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
-import { Header, Description, References, Example } from "../../overviews/MasonicCipherOverview";
+import {
+  Header,
+  Description,
+  References,
+  Example,
+} from "../../overviews/MasonicCipherOverview";
 
 const masonicSymbols = {
-  'A': '🞂', 'B': '🞃', 'C': '🞄', 'D': '🞅', 'E': '🞆',
-  'F': '🞇', 'G': '🞈', 'H': '🞉', 'I': '🞊', 'J': '🞋',
-  'K': '🞌', 'L': '🞍', 'M': '🞎', 'N': '🞏', 'O': '🞐',
-  'P': '🞑', 'Q': '🞒', 'R': '🞓', 'S': '🞔', 'T': '🞕',
-  'U': '🞖', 'V': '🞗', 'W': '🞘', 'X': '🞙', 'Y': '🞚', 'Z': '🞛'
+  A: "🞂",
+  B: "🞃",
+  C: "🞄",
+  D: "🞅",
+  E: "🞆",
+  F: "🞇",
+  G: "🞈",
+  H: "🞉",
+  I: "🞊",
+  J: "🞋",
+  K: "🞌",
+  L: "🞍",
+  M: "🞎",
+  N: "🞏",
+  O: "🞐",
+  P: "🞑",
+  Q: "🞒",
+  R: "🞓",
+  S: "🞔",
+  T: "🞕",
+  U: "🞖",
+  V: "🞗",
+  W: "🞘",
+  X: "🞙",
+  Y: "🞚",
+  Z: "🞛",
 };
 
 function encodeMasonic(str) {
-  let encodedText = '';
+  let encodedText = "";
   for (let char of str.toUpperCase()) {
     encodedText += masonicSymbols[char] || char;
   }
@@ -159,24 +181,79 @@ function encodeMasonic(str) {
 }
 
 function decodeMasonic(str) {
-  const decodingSymbols = Object.fromEntries(Object.entries(masonicSymbols).map(([key, value]) => [value, key]));
-  let decodedText = '';
-  let symbol = '';
+  const decodingSymbols = Object.fromEntries(
+    Object.entries(masonicSymbols).map(([key, value]) => [value, key])
+  );
+  let decodedText = "";
+  let symbol = "";
   for (let char of str) {
     symbol += char;
     if (decodingSymbols[symbol]) {
       decodedText += decodingSymbols[symbol];
-      symbol = '';
+      symbol = "";
     }
   }
   return decodedText;
 }
 
-export default function MasonicCipher(props) {
+export default function MasonicCipher() {
   const [showOverview, setShowOverview] = useState(false);
-  const [inputText, setInputText] = useState('');
-  const [inputChars, setInputChars] = useState([]);
-  const [outputChars, setOutputChars] = useState([]);
+  const [explanation, setExplanation] = useState([]); // Explanation state
+
+  const encode = (plaintext) => {
+    const explanationsArray = []; // Array to store explanations
+    const encodedText = encodeMasonic(plaintext);
+
+    explanationsArray.push(
+      `<strong>Plaintext: </strong><code>${plaintext}</code><br>`
+    );
+
+    plaintext
+      .toUpperCase()
+      .split("")
+      .forEach((char) => {
+        explanationsArray.push(
+          `<code>${char}</code> → Symbol: <code>${
+            masonicSymbols[char] || char
+          }</code><br>`
+        );
+      });
+
+    explanationsArray.push(
+      `<br><strong>Final Ciphertext:</strong> <code>${encodedText}</code><br>`
+    );
+
+    setExplanation(explanationsArray);
+    return encodedText;
+  };
+
+  const decode = (ciphertext) => {
+    const explanationsArray = []; // Array to store explanations
+    const decodedText = decodeMasonic(ciphertext);
+
+    explanationsArray.push(
+      `<strong>Ciphertext: </strong><code>${ciphertext}</code><br>`
+    );
+
+    for (let char of ciphertext) {
+      const symbol = char;
+      const decodedChar = Object.keys(masonicSymbols).find(
+        (key) => masonicSymbols[key] === symbol
+      );
+      explanationsArray.push(
+        `Symbol <code>${symbol}</code> → <code>${
+          decodedChar || symbol
+        }</code><br>`
+      );
+    }
+
+    explanationsArray.push(
+      `<br><strong>Final Plaintext:</strong> <code>${decodedText}</code><br>`
+    );
+
+    setExplanation(explanationsArray);
+    return decodedText;
+  };
 
   return (
     <>
@@ -192,9 +269,9 @@ export default function MasonicCipher(props) {
       <CipherFactory
         title={"Masonic Cipher"}
         setShowOverview={setShowOverview}
-        encode={encodeMasonic}
-        decode={decodeMasonic}
-        keyComponentA={1}
+        encode={encode}
+        decode={decode}
+        explanation={explanation} // Pass explanation to CipherFactory
       />
     </>
   );

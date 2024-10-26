@@ -116,11 +116,11 @@
 //             <p>It uses linear algebra and matrix mathematics to transform plaintext into ciphertext and vice versa.</p>
 //             <p>The security of the Hill Cipher relies on the size of the matrix used for encryption.</p>
 //             <ul>
-               
+
 //                 <li>The Hill Cipher encrypts plaintext using matrix multiplication.</li>
 //                 <li>To encrypt: Break the plaintext into blocks of numbers corresponding to their position in the alphabet, then multiply the plaintext matrix by the key matrix.</li>
 //                 <li>To decrypt: Multiply the ciphertext matrix by the inverse of the key matrix.</li>
-               
+
 //             </ul>
 //       </>
 //     );
@@ -131,11 +131,10 @@
 //     <>
 //                <div>
 //             <label>
-              
+
 //                  {/* <input type="text" value={keyword} onChange={(e) => setKeyword(e.target.value)} /> */}
 //             </label>
 //         </div>
-     
 
 //     <CipherFactory encode={encrypt} decode={decrypt} keyComponentA={"STR"} />
 //     </>
@@ -148,11 +147,17 @@
 import React, { useState, useEffect } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
-import { Header, Description, References, Example } from "../../overviews/HillCipherOverview";
+import {
+  Header,
+  Description,
+  References,
+  Example,
+} from "../../overviews/HillCipherOverview";
 
 const HillCipher = ({ ongetInfo }) => {
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const [showOverview, setShowOverview] = useState(false); // Define state for showOverview
+  const [explanation, setExplanation] = useState([]); // State to store explanations
 
   useEffect(() => {
     generateRandomKeyword();
@@ -160,7 +165,7 @@ const HillCipher = ({ ongetInfo }) => {
 
   const generateRandomKeyword = () => {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let randomKeyword = '';
+    let randomKeyword = "";
     for (let i = 0; i < 9; i++) {
       randomKeyword += alphabet[Math.floor(Math.random() * 26)];
     }
@@ -190,34 +195,92 @@ const HillCipher = ({ ongetInfo }) => {
     return result;
   };
 
-  const encrypt = (message, keyword) => {
+  const encrypt = (message) => {
     let keyMatrix = getKeyMatrixFromKeyword(keyword);
-    let messageVector = message.toUpperCase().split('').map(char => char.charCodeAt(0) % 65);
+    let messageVector = message
+      .toUpperCase()
+      .split("")
+      .map((char) => char.charCodeAt(0) % 65);
     while (messageVector.length % 3 !== 0) messageVector.push(23); // Padding with 'X' (23)
-    let cipherText = '';
+
+    let cipherText = "";
+    const explanationsArray = []; // Array to store explanations
+    explanationsArray.push(
+      `<strong>Encoding Process:</strong><br>Plaintext: <code>${message}</code><br>`
+    );
+
     for (let i = 0; i < messageVector.length; i += 3) {
-      let cipherVector = matrixMultiply(keyMatrix, messageVector.slice(i, i + 3));
-      cipherText += cipherVector.map(num => String.fromCharCode(num + 65)).join('');
+      let cipherVector = matrixMultiply(
+        keyMatrix,
+        messageVector.slice(i, i + 3)
+      );
+      const cipherSegment = cipherVector
+        .map((num) => String.fromCharCode(num + 65))
+        .join("");
+      cipherText += cipherSegment;
+
+      explanationsArray.push(
+        `Plaintext segment: <code>${message.slice(
+          i,
+          i + 3
+        )}</code> → Ciphertext segment: <code>${cipherSegment}</code><br>`
+      );
     }
+
+    explanationsArray.push(
+      `<strong>Final Ciphertext:</strong> <code>${cipherText}</code><br>`
+    );
+    setExplanation(explanationsArray); // Update explanation state
     return cipherText;
   };
 
-  const decrypt = (cipher, keyword) => {
+  const decrypt = (cipher) => {
     let keyMatrix = getKeyMatrixFromKeyword(keyword);
-    let cipherVector = cipher.toUpperCase().split('').map(char => char.charCodeAt(0) % 65);
+    let cipherVector = cipher
+      .toUpperCase()
+      .split("")
+      .map((char) => char.charCodeAt(0) % 65);
     let inverseKeyMatrix = getInverseMatrix(keyMatrix);
-    let decryptedText = '';
+    let decryptedText = "";
+
+    const explanationsArray = []; // Array to store explanations
+    explanationsArray.push(
+      `<strong>Decoding Process:</strong><br>Ciphertext: <code>${cipher}</code><br>`
+    );
+
     for (let i = 0; i < cipherVector.length; i += 3) {
-      let messageVector = matrixMultiply(inverseKeyMatrix, cipherVector.slice(i, i + 3));
-      decryptedText += messageVector.map(str => String.fromCharCode(str)).join('');
+      let messageVector = matrixMultiply(
+        inverseKeyMatrix,
+        cipherVector.slice(i, i + 3)
+      );
+      const plainSegment = messageVector
+        .map((num) => String.fromCharCode(num + 65))
+        .join("");
+      decryptedText += plainSegment;
+
+      explanationsArray.push(
+        `Ciphertext segment: <code>${cipher.slice(
+          i,
+          i + 3
+        )}</code> → Plaintext segment: <code>${plainSegment}</code><br>`
+      );
     }
+
+    explanationsArray.push(
+      `<strong>Final Plaintext:</strong> <code>${decryptedText}</code><br>`
+    );
+    setExplanation(explanationsArray); // Update explanation state
     return decryptedText;
   };
 
   const getInverseMatrix = (matrix) => {
-    let det = matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
-              matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
-              matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
+    let det =
+      matrix[0][0] *
+        (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
+      matrix[0][1] *
+        (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
+      matrix[0][2] *
+        (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
     det = ((det % 26) + 26) % 26; // Ensure positive modulo 26
     let detInverse = -1;
     for (let i = 1; i < 26; i++) {
@@ -232,23 +295,23 @@ const HillCipher = ({ ongetInfo }) => {
       [
         matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1],
         matrix[0][2] * matrix[2][1] - matrix[0][1] * matrix[2][2],
-        matrix[0][1] * matrix[1][2] - matrix[0][2] * matrix[1][1]
+        matrix[0][1] * matrix[1][2] - matrix[0][2] * matrix[1][1],
       ],
       [
         matrix[1][2] * matrix[2][0] - matrix[1][0] * matrix[2][2],
         matrix[0][0] * matrix[2][2] - matrix[0][2] * matrix[2][0],
-        matrix[0][2] * matrix[1][0] - matrix[0][0] * matrix[1][2]
+        matrix[0][2] * matrix[1][0] - matrix[0][0] * matrix[1][2],
       ],
       [
         matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0],
         matrix[0][1] * matrix[2][0] - matrix[0][0] * matrix[2][1],
-        matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-      ]
+        matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+      ],
     ];
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        adj[i][j] = ((adj[i][j] * detInverse) % 26 + 26) % 26;
+        adj[i][j] = (((adj[i][j] * detInverse) % 26) + 26) % 26;
       }
     }
 
@@ -272,7 +335,9 @@ const HillCipher = ({ ongetInfo }) => {
         encode={encrypt}
         decode={decrypt}
         keyComponentA="STR"
+        explanation={explanation} // Pass explanation to CipherFactory
       />
+      {/* <div dangerouslySetInnerHTML={{ __html: explanation.join('') }} /> Display explanation */}
     </>
   );
 };

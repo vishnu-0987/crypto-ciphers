@@ -129,35 +129,42 @@ export default function CipherFactory({
           </Row>
         )}
       </div>
-
-      <Row className="text-inputs">
-        <SmoothTextInput
-          value={leftText}
-          isLeft={true}
-          onChange={handleLeftTextChange}
-          placeholder="Enter text to Encrypt"
-          className="text-input"
-        />
-        <SmoothTextInput
-          value={rightText}
-          isLeft={false}
-          onChange={handleRightTextChange}
-          placeholder="Enter text to Decrypt"
-          className="text-input"
-        />
-      </Row>
-
-      {/* Dynamic Explanation Section */}
-      {explanation && explanation.length > 0 && (
-        <div className="explanation-section">
-          <Title level={3}>Encryption Explanation:</Title>
-          <ul>
-            {explanation.map((exp, index) => (
-              <li key={index}>{exp}</li>
-            ))}
-          </ul>
+      <div className="input-and-explanation-container">
+        <div
+          className={
+            (leftText || rightText) && explanation && explanation.length > 0
+              ? "text-inputs"
+              : "text-inputs-row"
+          }
+        >
+          <SmoothTextInput
+            value={leftText}
+            isLeft={true}
+            onChange={handleLeftTextChange}
+            placeholder="Enter text to Encrypt"
+            className="text-input"
+          />
+          <SmoothTextInput
+            value={rightText}
+            isLeft={false}
+            onChange={handleRightTextChange}
+            placeholder="Enter text to Decrypt"
+            className="text-input"
+          />
         </div>
-      )}
+
+        {/* Render explanation only when leftText or rightText has content */}
+        {(leftText || rightText) && explanation && explanation.length > 0 && (
+          <div className="explanation-section">
+            <Title level={3}>Encryption Explanation:</Title>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: explanation.join(""), // Render explanations as HTML
+              }}
+            />
+          </div>
+        )}
+      </div>
     </Card>
   );
 }

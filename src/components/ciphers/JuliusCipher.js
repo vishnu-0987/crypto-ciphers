@@ -6,11 +6,11 @@
 //     // Create a function to encode a string using the Caesar cipher
 //     function encode(str, shift) {
 //         let encodedChars = '';
-    
+
 //         for (let i = 0; i < str.length; i++) {
 //             let char = str[i];
 //             let charCode = char.charCodeAt(0);
-    
+
 //             if (charCode >= 65 && charCode <= 90) {
 //                 // Uppercase letters
 //                 char = String.fromCharCode(((charCode - 65 + shift) % 26) + 65);
@@ -18,11 +18,10 @@
 //                 // Lowercase letters
 //                 char = String.fromCharCode(((charCode - 97 + shift) % 26) + 97);
 //             }
-    
+
 //             encodedChars += char;
 //         }
-    
-    
+
 //         return encodedChars;
 //     }
 
@@ -31,8 +30,6 @@
 //         // Encode the string with a negative shift to reverse the original shift
 //         return encode(str, -shift);
 //     }
-
-    
 
 //     const showInformation = () => {
 //         const info = (
@@ -56,23 +53,19 @@
 //         showInformation();
 //     }, []);
 
-
-//     return( 
+//     return(
 //     <>
-        
+
 //         <CipherFactory encode={encode} decode={decode} keyComponentA={1} />
 //     </>
-    
+
 // )
 // };
 
-// TODO: import useState from react
 import React, { useState } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
-// TODO: Import CipherOverview component
 import CipherOverview from "../../ui/CipherOverview";
 
-// TODO: import components from overview component
 import {
   Header,
   Description,
@@ -82,10 +75,15 @@ import {
 
 export default function JuliusCaesarCipher({ ongetInfo }) {
   const [showOverview, setShowOverview] = useState(false);
+  const [explanation, setExplanation] = useState([]); // State for storing the explanation
 
   // Function to encode a string using the Caesar cipher
   function encode(str, shift) {
     let encodedChars = "";
+    let explanation = []; // Explanation array to store the steps
+    explanation.push(
+      `<strong>Encoding Process:</strong><br><code>${str}</code> with shift: ${shift}<br>`
+    );
 
     for (let i = 0; i < str.length; i++) {
       let char = str[i];
@@ -93,26 +91,48 @@ export default function JuliusCaesarCipher({ ongetInfo }) {
 
       if (charCode >= 65 && charCode <= 90) {
         // Uppercase letters
-        char = String.fromCharCode(((charCode - 65 + shift) % 26) + 65);
+        const newChar = String.fromCharCode(
+          ((charCode - 65 + shift) % 26) + 65
+        );
+        explanation.push(
+          `Character <code>${char}</code> → <code>${newChar}</code> (Uppercase)<br>`
+        );
+        char = newChar;
       } else if (charCode >= 97 && charCode <= 122) {
         // Lowercase letters
-        char = String.fromCharCode(((charCode - 97 + shift) % 26) + 97);
+        const newChar = String.fromCharCode(
+          ((charCode - 97 + shift) % 26) + 97
+        );
+        explanation.push(
+          `Character <code>${char}</code> → <code>${newChar}</code> (Lowercase)<br>`
+        );
+        char = newChar;
+      } else {
+        explanation.push(
+          `Character <code>${char}</code> remains unchanged.<br>`
+        );
       }
 
       encodedChars += char;
     }
 
+    explanation.push(
+      `<strong>Final Encoded Text:</strong> <code>${encodedChars}</code><br>`
+    );
+    setExplanation(explanation); // Update explanation state
     return encodedChars;
   }
 
   // Function to decode a string using the Caesar cipher
   function decode(str, shift) {
-    // Encode the string with a negative shift to reverse the original shift
-    return encode(str, -shift);
+    let explanation = []; // Explanation array for decoding
+    explanation.push(
+      `<strong>Decoding Process:</strong><br><code>${str}</code> with shift: ${shift}<br>`
+    );
+    setExplanation(explanation); // Update explanation before decoding
+    return encode(str, -shift); // Use encoding logic with negative shift for decoding
   }
 
-  // TODO:  Add the CipherOverview component in the return statement.
-  // TODO:  Add title and setShowOverview attribute to the CipherFactory component.
   return (
     <>
       {showOverview && (
@@ -130,8 +150,8 @@ export default function JuliusCaesarCipher({ ongetInfo }) {
         encode={encode}
         decode={decode}
         keyComponentA={1}
+        explanation={explanation} // Pass explanation to CipherFactory
       />
     </>
   );
 }
-

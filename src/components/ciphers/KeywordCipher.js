@@ -19,7 +19,7 @@
 //         const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 //         const key = createKey(keyword, alphabet);
 //         const direction = isDecrypt ? -1 : 1;
-        
+
 //         return text.split('').map((char, index) => {
 //             const charCode = char.toLowerCase().charCodeAt(0);
 //             if (/[a-zA-Z]/.test(char)) {
@@ -53,11 +53,11 @@
 //             <p>It is a type of substitution cipher where each letter in the plaintext is shifted a certain number of places down or up the alphabet based on the alphabetical position of the corresponding letter in the keyword.</p>
 //             <p>The Keyword Cipher is a simple and easy-to-implement cipher, often used for educational purposes or as a stepping stone to more complex ciphers.</p>
 //             <ul>
-               
+
 //                 <li>The Keyword Cipher encrypts plaintext by shifting each letter based on the alphabetical position of the keyword.</li>
 //                 <li>To encrypt: Create a mixed alphabet based on the keyword, where the keyword determines the starting point of the alphabet.</li>
 //                 <li>To decrypt: Reverse the encryption process by creating a mixed alphabet based on the keyword and shifting each letter of the ciphertext to find the original plaintext.</li>
-               
+
 //             </ul>
 //             </>
 //         );
@@ -76,7 +76,6 @@
 
 //     return <CipherFactory encode={encode} decode={decode} keyComponentA={"STR"} />;
 // }
-
 
 // import React, { useState } from "react";
 // import CipherFactory from "../../ui/EncryptDecrypt";
@@ -102,7 +101,7 @@
 //         const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 //         const key = createKey(keyword, alphabet);
 //         const direction = isDecrypt ? -1 : 1;
-        
+
 //         return text.split('').map((char, index) => {
 //             const charCode = char.toLowerCase().charCodeAt(0);
 //             if (/[a-zA-Z]/.test(char)) {
@@ -150,67 +149,89 @@
 //     );
 // }
 
-import React, { useState } from 'react';
-import CipherFactory from '../../ui/EncryptDecrypt';
-import CipherOverview from '../../ui/CipherOverview';
+import React, { useState } from "react";
+import CipherFactory from "../../ui/EncryptDecrypt";
+import CipherOverview from "../../ui/CipherOverview";
 import {
   Header,
   Description,
   References,
   Example,
-} from '../../overviews/KeywordCipherOverview';
+} from "../../overviews/KeywordCipherOverview";
 
 export default function KeywordCipher(props) {
   const [showOverview, setShowOverview] = useState(false);
-  const [keyword, setKeyword] = useState('');
-  const [textToEncode, setTextToEncode] = useState('');
-  const [encodedText, setEncodedText] = useState('');
-  const [decodedText, setDecodedText] = useState('');
+  const [keyword, setKeyword] = useState("");
+  const [explanation, setExplanation] = useState([]); // State for storing explanation
 
   function generateKeyword(keyword) {
     // Function to generate a keyword without duplicate letters
     keyword = keyword.toUpperCase(); // Convert keyword to uppercase
     let uniqueChars = [];
-    
+
     for (let i = 0; i < keyword.length; i++) {
       if (uniqueChars.indexOf(keyword[i]) === -1) {
         uniqueChars.push(keyword[i]);
       }
     }
-    
+
     // Generate remaining alphabet characters not in the keyword
-    let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (let i = 0; i < alphabet.length; i++) {
       if (uniqueChars.indexOf(alphabet[i]) === -1) {
         uniqueChars.push(alphabet[i]);
       }
     }
-    
-    return uniqueChars.join(''); // Return the generated keyword
+
+    return uniqueChars.join(""); // Return the generated keyword
   }
 
   function encryptMessage(message, keyword) {
     keyword = generateKeyword(keyword); // Generate the keyword cipher alphabet
-    message = message.toUpperCase().replace(/[^A-Z]/g, ''); // Convert message to uppercase and remove non-alphabet characters
-    let encryptedMessage = '';
+    message = message.toUpperCase().replace(/[^A-Z]/g, ""); // Convert message to uppercase and remove non-alphabet characters
+    let encryptedMessage = "";
+    let explanation = [
+      `<strong>Keyword:</strong> <code>${keyword}</code><br><strong>Encoding Process:</strong><br>`,
+    ]; // Initialize explanation
 
     for (let i = 0; i < message.length; i++) {
       let charIndex = message.charCodeAt(i) - 65; // Get index of current character in message
       encryptedMessage += keyword[charIndex]; // Substitute with corresponding character from keyword alphabet
+      explanation.push(
+        `Character <code>${message[i]}</code> (index ${charIndex}) → <code>${keyword[charIndex]}</code><br>`
+      );
     }
 
+    explanation.push(
+      `<strong>Final Encoded Text:</strong> <code>${encryptedMessage}</code><br>`
+    );
+    setExplanation(explanation); // Update explanation state
     return encryptedMessage;
   }
 
   function decryptMessage(message, keyword) {
     keyword = generateKeyword(keyword); // Generate the keyword cipher alphabet
-    let decryptedMessage = '';
+    let decryptedMessage = "";
+    let explanation = [
+      `<strong>Keyword:</strong> <code>${keyword}</code><br><strong>Decoding Process:</strong><br>`,
+    ]; // Initialize explanation
 
     for (let i = 0; i < message.length; i++) {
       let charIndex = keyword.indexOf(message[i]); // Get index of current character in cipher alphabet
       decryptedMessage += String.fromCharCode(charIndex + 65); // Convert index to character code and append to decrypted message
+      explanation.push(
+        `Character <code>${
+          message[i]
+        }</code> (index ${charIndex}) → <code>${String.fromCharCode(
+          charIndex + 65
+        )}</code><br>`
+      );
     }
 
+    explanation.push(
+      `<strong>Final Decoded Text:</strong> <code>${decryptedMessage}</code><br>`
+    );
+    setExplanation(explanation); // Update explanation state
     return decryptedMessage;
   }
 
@@ -239,6 +260,7 @@ export default function KeywordCipher(props) {
         encode={encode}
         decode={decode}
         keyComponentA="STR"
+        explanation={explanation} // Pass explanation to CipherFactory
       />
     </>
   );

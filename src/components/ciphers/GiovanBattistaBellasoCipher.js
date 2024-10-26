@@ -74,12 +74,12 @@ import {
 function generateVigenereSquare(keyword) {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const square = [];
-  
+
   for (let i = 0; i < 26; i++) {
     const row = alphabet.slice(i) + alphabet.slice(0, i);
     square.push(row);
   }
-  
+
   return square;
 }
 
@@ -88,7 +88,7 @@ function encryptBellaso(message, keyword) {
   const square = generateVigenereSquare(keyword.toUpperCase());
   let ciphertext = "";
   let keyIndex = 0;
-  
+
   for (let i = 0; i < message.length; i++) {
     const char = message[i].toUpperCase();
     if (char === " ") {
@@ -100,7 +100,7 @@ function encryptBellaso(message, keyword) {
     ciphertext += square[rowIndex][colIndex];
     keyIndex = (keyIndex + 1) % keyword.length;
   }
-  
+
   return ciphertext;
 }
 
@@ -109,7 +109,7 @@ function decryptBellaso(ciphertext, keyword) {
   const square = generateVigenereSquare(keyword.toUpperCase());
   let plaintext = "";
   let keyIndex = 0;
-  
+
   for (let i = 0; i < ciphertext.length; i++) {
     const char = ciphertext[i].toUpperCase();
     if (char === " ") {
@@ -122,7 +122,7 @@ function decryptBellaso(ciphertext, keyword) {
     plaintext += square[0][colIndex];
     keyIndex = (keyIndex + 1) % keyword.length;
   }
-  
+
   return plaintext;
 }
 

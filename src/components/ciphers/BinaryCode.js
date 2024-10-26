@@ -12,23 +12,56 @@ import {
 
 export default function BinaryCode() {
   const [showOverview, setShowOverview] = useState(false);
+  const [explanation, setExplanation] = useState([]); // Explanation state
 
   function encode(text) {
-    return text
+    const explanationsArray = [];
+    const binaryCodes = text
       .split("")
       .map((char) => {
-        return char.charCodeAt(0).toString(2).padStart(8, "0");
+        const binaryChar = char.charCodeAt(0).toString(2).padStart(8, "0");
+        // Add explanation for this character
+        explanationsArray.push(
+          `<code>${char}</code> → <code>${binaryChar}</code><br>`
+        );
+        return binaryChar;
       })
       .join(" ");
+
+    explanationsArray.unshift(
+      `<strong>Text:</strong> <code>${text}</code><br>`
+    );
+    explanationsArray.push(
+      `<strong>Final Binary Code:</strong> <code>${binaryCodes}</code><br>`
+    );
+
+    setExplanation(explanationsArray);
+    return binaryCodes;
   }
 
   function decode(binary) {
-    return binary
+    const explanationsArray = [];
+    const decodedText = binary
       .split(" ")
       .map((bin) => {
-        return String.fromCharCode(parseInt(bin, 2));
+        const char = String.fromCharCode(parseInt(bin, 2));
+        // Add explanation for this binary code
+        explanationsArray.push(
+          `<code>${bin}</code> → <code>${char}</code><br>`
+        );
+        return char;
       })
       .join("");
+
+    explanationsArray.unshift(
+      `<strong>Decoding Process:</strong><br>Binary: <code>${binary}</code><br>`
+    );
+    explanationsArray.push(
+      `<strong>Final Text:</strong> <code>${decodedText}</code><br>`
+    );
+
+    setExplanation(explanationsArray);
+    return decodedText;
   }
 
   return (
@@ -43,10 +76,11 @@ export default function BinaryCode() {
         />
       )}
       <CipherFactory
-        title={"BinaryCode"}
+        title={"Binary Code"}
         setShowOverview={setShowOverview}
         encode={encode}
         decode={decode}
+        explanation={explanation} // Pass explanation to CipherFactory
       />
     </>
   );

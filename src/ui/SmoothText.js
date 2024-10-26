@@ -6,6 +6,7 @@ const SmoothTextInput = (props) => {
       placeholder={props.placeholder}
       value={props.value}
       onChange={props.onChange}
+      rows={4}
       style={{
         backgroundColor: "white",
         padding: "20px 30px",
@@ -15,8 +16,8 @@ const SmoothTextInput = (props) => {
         // borderLeft: props.isLeft ? "" : "5px solid blue",
         // boxShadow: "0px 0px 15px #d4d4d4",
         outline: "none",
-        height: "400px",
-        width: "50%",
+
+        width: "100%",
         fontSize: "32px",
         // fontFamily: "Poppins, serif",
         fontFamily: "Roboto Slab",

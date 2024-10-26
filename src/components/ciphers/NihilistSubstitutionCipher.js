@@ -6,19 +6,19 @@
 //     const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // Skipping 'J' as per Nihilist Cipher convention
 //     const key = Array.from(new Set(keyword.toUpperCase().replace(/J/g, 'I') + alphabet)); // Combine keyword and remaining alphabet, removing duplicates
 //     const keySquare = [];
-    
+
 //     // Create a 5x5 matrix (key square)
 //     for (let i = 0; i < 5; i++) {
 //         keySquare.push(key.slice(i * 5, (i + 1) * 5));
 //     }
-    
+
 //     return keySquare;
 // }
 
 // // Function to generate a numerical key for a given message
 // const generateNumericKey = (keySquare, message) => {
 //     const numericKey = [];
-    
+
 //     // Convert each letter of the message to its corresponding row and column numbers in the key square
 //     for (let i = 0; i < message.length; i++) {
 //         let char = message[i].toUpperCase();
@@ -32,7 +32,7 @@
 //             }
 //         }
 //     }
-    
+
 //     return numericKey;
 // }
 
@@ -56,14 +56,14 @@
 //     const keySquare = generateKeySquare(keyword);
 //     const numericKey = encodedMessage.split(' ').map(Number);
 //     let decryptedMessage = '';
-    
+
 //     // Convert each numeric key to its corresponding letter in the key square
 //     for (let i = 0; i < numericKey.length; i++) {
 //         const row = Math.floor((numericKey[i] - 1) / 10);
 //         const col = (numericKey[i] - 1) % 10;
 //         decryptedMessage += keySquare[row][col];
 //     }
-    
+
 //     return decryptedMessage;
 // }
 
@@ -79,11 +79,11 @@
 //             <p>It uses a Polybius square to convert letters into numbers and a keyword to perform numerical substitution, followed by a transposition step to further obfuscate the message.</p>
 //             <p>The Nihilist Substitution Cipher is valued for its ability to add layers of complexity to the encrypted message, making it challenging to break without the key.</p>
 //             <ul>
-               
+
 //                 <li>The Nihilist Substitution Cipher combines Polybius square substitution with a keyword-based numerical substitution and transposition.</li>
 //                 <li>To encrypt: Convert the plaintext into numbers using the Polybius square, add a numerical key derived from a keyword, and then transpose the resulting numbers based on another keyword or pattern.</li>
 //                 <li>To decrypt: Reverse the transposition process, subtract the numerical key, and use the Polybius square to convert the numbers back into plaintext letters.</li>
-               
+
 //             </ul>
 //             </>
 //         );
@@ -103,7 +103,6 @@
 //     );
 // }
 
-
 // import React, { useState } from "react";
 // import CipherFactory from "../../ui/EncryptDecrypt";
 // import CipherOverview from "../../ui/CipherOverview";
@@ -114,19 +113,19 @@
 //     const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // Skipping 'J' as per Nihilist Cipher convention
 //     const key = Array.from(new Set(keyword.toUpperCase().replace(/J/g, 'I') + alphabet)); // Combine keyword and remaining alphabet, removing duplicates
 //     const keySquare = [];
-    
+
 //     // Create a 5x5 matrix (key square)
 //     for (let i = 0; i < 5; i++) {
 //         keySquare.push(key.slice(i * 5, (i + 1) * 5));
 //     }
-    
+
 //     return keySquare;
 // }
 
 // // Function to generate a numerical key for a given message
 // const generateNumericKey = (keySquare, message) => {
 //     const numericKey = [];
-    
+
 //     // Convert each letter of the message to its corresponding row and column numbers in the key square
 //     for (let i = 0; i < message.length; i++) {
 //         let char = message[i].toUpperCase();
@@ -140,7 +139,7 @@
 //             }
 //         }
 //     }
-    
+
 //     return numericKey;
 // }
 
@@ -164,14 +163,14 @@
 //     const keySquare = generateKeySquare(keyword);
 //     const numericKey = encodedMessage.split(' ').map(Number);
 //     let decryptedMessage = '';
-    
+
 //     // Convert each numeric key to its corresponding letter in the key square
 //     for (let i = 0; i < numericKey.length; i++) {
 //         const row = Math.floor((numericKey[i] - 1) / 10);
 //         const col = (numericKey[i] - 1) % 10;
 //         decryptedMessage += keySquare[row][col];
 //     }
-    
+
 //     return decryptedMessage;
 // }
 
@@ -200,191 +199,128 @@
 //         </>
 //     );
 // }
-
 import React, { useState } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
-import { Header, Description, References, Example } from "../../overviews/NihilistSubstitutionCipherOverview"; // Adjust the import path
+import {
+  Header,
+  Description,
+  References,
+  Example,
+} from "../../overviews/NihilistSubstitutionCipherOverview"; // Adjust the import path
 
-// // Function to generate a key square from a keyword
-// const generateKeySquare = (keyword) => {
-//     const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // Skipping 'J' as per Nihilist Cipher convention
-//     const key = Array.from(new Set(keyword.toUpperCase().replace(/J/g, 'I') + alphabet)); // Combine keyword and remaining alphabet, removing duplicates
-//     const keySquare = [];
-    
-//     // Create a 5x5 matrix (key square)
-//     for (let i = 0; i < 5; i++) {
-//         keySquare.push(key.slice(i * 5, (i + 1) * 5));
-//     }
-    
-//     return keySquare;
-// }
-
-// // Function to generate a numerical key for a given message
-// const generateNumericKey = (keySquare, message) => {
-//     const numericKey = [];
-    
-//     // Convert each letter of the message to its corresponding row and column numbers in the key square
-//     for (let i = 0; i < message.length; i++) {
-//         let char = message[i].toUpperCase();
-//         if (char === 'J') char = 'I'; // Convert 'J' to 'I' as per Nihilist Cipher convention
-//         if (char === ' ') continue; // Ignore spaces
-//         for (let row = 0; row < 5; row++) {
-//             for (let col = 0; col < 5; col++) {
-//                 if (keySquare[row][col] === char) {
-//                     numericKey.push((row + 1) * 10 + (col + 1)); // Concatenate row and column numbers
-//                 }
-//             }
-//         }
-//     }
-    
-//     return numericKey;
-// }
-
-// // Function to encrypt a message using the Nihilist Substitution Cipher
-// const encryptNihilist = (message, keyword) => {
-//     if (typeof message !== 'string' || typeof keyword !== 'string') {
-//         throw new TypeError('Both message and keyword must be strings');
-//     }
-
-//     const keySquare = generateKeySquare(keyword);
-//     const numericKey = generateNumericKey(keySquare, message);
-//     return numericKey.join(' ');
-// }
-
-// // Function to decrypt a message using the Nihilist Substitution Cipher
-// const decryptNihilist = (encodedMessage, keyword) => {
-//     if (typeof encodedMessage !== 'string' || typeof keyword !== 'string') {
-//         throw new TypeError('Both encoded message and keyword must be strings');
-//     }
-
-//     const keySquare = generateKeySquare(keyword);
-//     const numericKey = encodedMessage.split(' ').map(Number);
-//     let decryptedMessage = '';
-    
-//     // Convert each numeric key to its corresponding letter in the key square
-//     for (let i = 0; i < numericKey.length; i++) {
-//         const row = Math.floor((numericKey[i] - 1) / 10);
-//         const col = (numericKey[i] - 1) % 10;
-//         decryptedMessage += keySquare[row][col];
-//     }
-    
-//     return decryptedMessage;
-// }
-
-// export default function NihilistCipher({ ongetInfo }) {
-//     const keyword = "CIPHER KEY A"; // Fixed keyword
-//     const [showOverview, setShowOverview] = useState(false);
-
-//     return (
-//         <>
-//             {showOverview && (
-//                 <CipherOverview
-//                     setShowOverview={setShowOverview}
-//                     Header={Header}
-//                     Description={Description}
-//                     Example={Example}
-//                     References={References}
-//                 />
-//             )}
-//             <CipherFactory
-//                 title={"Nihilist Substituition Cipher"}
-//                 setShowOverview={setShowOverview}
-//                 encode={(message) => encryptNihilist(message, keyword)}
-//                 decode={(encodedMessage) => decryptNihilist(encodedMessage, keyword)}
-//                 keyComponentA="STR"
-//             />
-//         </>
-//     );
 // Function to generate a key square from a keyword
 const generateKeySquare = (keyword) => {
-    const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // Skipping 'J' as per Nihilist Cipher convention
-    let key = Array.from(new Set(keyword.toUpperCase().replace(/J/g, 'I') + alphabet)).join('');
-    let keySquare = [];
+  const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // Skipping 'J' as per Nihilist Cipher convention
+  let key = Array.from(
+    new Set(keyword.toUpperCase().replace(/J/g, "I") + alphabet)
+  ).join("");
+  let keySquare = [];
 
-    // Create a 5x5 matrix (key square)
-    for (let i = 0; i < 5; i++) {
-        keySquare.push(key.slice(i * 5, (i + 1) * 5).split(''));
-    }
-    
-    return keySquare;
-}
+  // Create a 5x5 matrix (key square)
+  for (let i = 0; i < 5; i++) {
+    keySquare.push(key.slice(i * 5, (i + 1) * 5).split(""));
+  }
+
+  return keySquare;
+};
 
 // Function to generate a numerical key for a given message
 const generateNumericKey = (keySquare, message) => {
-    const numericKey = [];
-    
-    // Convert each letter of the message to its corresponding row and column numbers in the key square
-    for (let i = 0; i < message.length; i++) {
-        let char = message[i].toUpperCase();
-        if (char === 'J') char = 'I'; // Convert 'J' to 'I' as per Nihilist Cipher convention
-        if (char === ' ') continue; // Ignore spaces
-        for (let row = 0; row < 5; row++) {
-            for (let col = 0; col < 5; col++) {
-                if (keySquare[row][col] === char) {
-                    numericKey.push((row + 1) * 10 + (col + 1)); // Concatenate row and column numbers
-                    break;
-                }
-            }
+  const numericKey = [];
+
+  // Convert each letter of the message to its corresponding row and column numbers in the key square
+  for (let i = 0; i < message.length; i++) {
+    let char = message[i].toUpperCase();
+    if (char === "J") char = "I"; // Convert 'J' to 'I' as per Nihilist Cipher convention
+    if (char === " ") continue; // Ignore spaces
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 5; col++) {
+        if (keySquare[row][col] === char) {
+          numericKey.push((row + 1) * 10 + (col + 1)); // Concatenate row and column numbers
+          break;
         }
+      }
     }
-    
-    return numericKey;
-}
+  }
+
+  return numericKey;
+};
 
 // Function to encrypt a message using the Nihilist Substitution Cipher
-const encryptNihilist = (message, keyword) => {
-    if (typeof message !== 'string' || typeof keyword !== 'string') {
-        throw new TypeError('Both message and keyword must be strings');
-    }
+const encryptNihilist = (message, keyword, setExplanation) => {
+  if (typeof message !== "string" || typeof keyword !== "string") {
+    throw new TypeError("Both message and keyword must be strings");
+  }
 
-    const keySquare = generateKeySquare(keyword);
-    const numericKey = generateNumericKey(keySquare, message);
-    return numericKey.join(' ');
-}
+  const keySquare = generateKeySquare(keyword);
+  const numericKey = generateNumericKey(keySquare, message);
+
+  // Generate explanation for encryption process
+  let explanation = [`<strong>Key Square:</strong><br>`];
+  keySquare.forEach((row) => {
+    explanation.push(`<code>${row.join(" ")}</code><br>`);
+  });
+  explanation.push(`<strong>Numeric Key:</strong> ${numericKey.join(" ")}<br>`);
+  setExplanation(explanation);
+
+  return numericKey.join(" ");
+};
 
 // Function to decrypt a message using the Nihilist Substitution Cipher
-const decryptNihilist = (encodedMessage, keyword) => {
-    if (typeof encodedMessage !== 'string' || typeof keyword !== 'string') {
-        throw new TypeError('Both encoded message and keyword must be strings');
-    }
+const decryptNihilist = (encodedMessage, keyword, setExplanation) => {
+  if (typeof encodedMessage !== "string" || typeof keyword !== "string") {
+    throw new TypeError("Both encoded message and keyword must be strings");
+  }
 
-    const keySquare = generateKeySquare(keyword);
-    const numericKey = encodedMessage.split(' ').map(Number);
-    let decryptedMessage = '';
-    
-    // Convert each numeric key to its corresponding letter in the key square
-    for (let i = 0; i < numericKey.length; i++) {
-        const row = Math.floor((numericKey[i] - 1) / 10);
-        const col = (numericKey[i] - 1) % 10;
-        decryptedMessage += keySquare[row][col];
-    }
-    
-    return decryptedMessage;
-}
+  const keySquare = generateKeySquare(keyword);
+  const numericKey = encodedMessage.split(" ").map(Number);
+  let decryptedMessage = "";
+
+  // Generate explanation for decryption process
+  let explanation = [`<strong>Key Square:</strong><br>`];
+  keySquare.forEach((row) => {
+    explanation.push(`<code>${row.join(" ")}</code><br>`);
+  });
+
+  for (let i = 0; i < numericKey.length; i++) {
+    const row = Math.floor((numericKey[i] - 1) / 10);
+    const col = (numericKey[i] - 1) % 10;
+    decryptedMessage += keySquare[row][col];
+  }
+
+  explanation.push(`<strong>Decoded Message:</strong> ${decryptedMessage}<br>`);
+  setExplanation(explanation);
+
+  return decryptedMessage;
+};
 
 export default function NihilistCipher({ ongetInfo }) {
-    const keyword = "ATTACK"; // Fixed keyword
-    const [showOverview, setShowOverview] = useState(false);
+  const [keyword, setKeyword] = useState("ATTACK"); // Keyword state
+  const [showOverview, setShowOverview] = useState(false);
+  const [explanation, setExplanation] = useState([]); // Explanation state
 
-    return (
-        <>
-            {showOverview && (
-                <CipherOverview
-                    setShowOverview={setShowOverview}
-                    Header={Header}
-                    Description={Description}
-                    Example={Example}
-                    References={References}
-                />
-            )}
-            <CipherFactory
-                title={"Nihilist Substituition Cipher"}
-                setShowOverview={setShowOverview}
-                encode={(message) => encryptNihilist(message, keyword)}
-                decode={(encodedMessage) => decryptNihilist(encodedMessage, keyword)}
-                keyComponentA="STR"
-            />
-        </>
-    );
+  return (
+    <>
+      {showOverview && (
+        <CipherOverview
+          setShowOverview={setShowOverview}
+          Header={Header}
+          Description={Description}
+          Example={Example}
+          References={References}
+        />
+      )}
+      <CipherFactory
+        title={"Nihilist Substitution Cipher"}
+        setShowOverview={setShowOverview}
+        encode={(message) => encryptNihilist(message, keyword, setExplanation)}
+        decode={(encodedMessage) =>
+          decryptNihilist(encodedMessage, keyword, setExplanation)
+        }
+        explanation={explanation} // Pass explanation to CipherFactory
+        keyComponentA="STR"
+      />
+    </>
+  );
 }

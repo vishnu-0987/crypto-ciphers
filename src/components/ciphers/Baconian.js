@@ -1,6 +1,5 @@
 import React from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
-
 import CipherOverview from "../../ui/CipherOverview";
 import {
   Header,
@@ -10,10 +9,11 @@ import {
 } from "../../overviews/BaconianOverview";
 
 export default function BaconianCipher() {
-  // Encryption function for Baconian Cipher
   const [showOverview, setShowOverview] = React.useState(false);
+  const [explanation, setExplanation] = React.useState([]); // Explanation state
+
+  // Encryption function for Baconian Cipher
   function baconianEncrypt(plaintext) {
-    // Define the Baconian Cipher lookup table
     const baconianTable = {
       A: "AAAAA",
       B: "AAAAB",
@@ -43,31 +43,33 @@ export default function BaconianCipher() {
       Z: "BBAAB",
     };
 
-    // Convert plaintext to uppercase and remove any spaces
     plaintext = plaintext.toUpperCase().replace(/\s/g, "");
 
-    // Initialize the ciphertext variable
     let ciphertext = "";
+    let explanationsArray = [];
 
-    // Loop through each character in the plaintext
     for (let i = 0; i < plaintext.length; i++) {
-      // Get the Baconian code for the current character
       const baconianCode = baconianTable[plaintext[i]];
 
-      // Add the Baconian code to the ciphertext
       if (baconianCode) {
         ciphertext += baconianCode;
+        explanationsArray.push(
+          `<strong>'${plaintext[i]}'</strong> is encoded as <code>${baconianCode}</code><br>`
+        );
       } else {
         ciphertext += plaintext[i];
+        explanationsArray.push(
+          `<strong>'${plaintext[i]}'</strong> is not part of the cipher and remains as <code>${plaintext[i]}</code><br>`
+        );
       }
     }
 
+    setExplanation(explanationsArray);
     return ciphertext;
   }
 
   // Decryption function for Baconian Cipher
   function baconianDecrypt(ciphertext) {
-    // Define the Baconian Cipher lookup table
     const baconianTable = {
       AAAAA: "A",
       AAAAB: "B",
@@ -97,25 +99,27 @@ export default function BaconianCipher() {
       BBAAB: "Z",
     };
 
-    // Initialize the plaintext variable
     let plaintext = "";
+    let explanationsArray = [];
 
-    // Loop through the ciphertext in groups of 5 characters
     for (let i = 0; i < ciphertext.length; i += 5) {
-      // Get the current group of 5 characters
       const group = ciphertext.substr(i, 5);
-
-      // Get the plaintext character for the current group
       const plaintextChar = baconianTable[group];
 
-      // Add the plaintext character to the plaintext
       if (plaintextChar) {
         plaintext += plaintextChar;
+        explanationsArray.push(
+          `<strong><code>${group}</code></strong> is decoded as <strong>'${plaintextChar}'</strong><br>`
+        );
       } else {
         plaintext += group;
+        explanationsArray.push(
+          `<strong><code>${group}</code></strong> is not part of the cipher and remains as <code>${group}</code><br>`
+        );
       }
     }
 
+    setExplanation(explanationsArray);
     return plaintext;
   }
 
@@ -135,6 +139,7 @@ export default function BaconianCipher() {
         setShowOverview={setShowOverview}
         encode={baconianEncrypt}
         decode={baconianDecrypt}
+        explanation={explanation} // Pass explanation to CipherFactory
       />
     </>
   );

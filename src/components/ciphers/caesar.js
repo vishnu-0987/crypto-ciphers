@@ -1,65 +1,87 @@
 // CaesarCipher.js
-import React, { useState } from "react";
+import React from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
 import {
   Header,
   Description,
-  References,
   Example,
+  References,
 } from "../../overviews/CaesarOverview";
 
-export default function CaesarCipher(props) {
-  const [showOverview, setShowOverview] = useState(false);
-  const [explanation, setExplanation] = useState([]); // State for explanations
+export default function CaesarCipher() {
+  const [showOverview, setShowOverview] = React.useState(false);
+  const [explanations, setExplanations] = React.useState([]); // State for explanations
 
   function encode(str, shift) {
-    const chars = str.split("");
-    const encodedChars = [];
+    let ciphertext = "";
     const explanationsArray = [];
+    const shiftVal = shift % 26; // Calculate shift value modulo 26
 
-    chars.forEach((char) => {
+    explanationsArray.push(
+      `<strong>Plain Text:</strong> <code>${str}</code><br>`
+    );
+    explanationsArray.push(
+      `<strong>Shift Value:</strong> <code>${shift}</code><br>`
+    );
+
+    for (let char of str) {
       const charCode = char.charCodeAt(0);
-      let newCharCode = charCode + shift;
-      let explanationText = "";
+      let newCharCode = charCode + shiftVal; // Use shiftVal for calculations
 
       if (char >= "A" && char <= "Z") {
         const base = 65; // ASCII code for 'A'
         const alphabetSize = 26;
         const originalPosition = charCode - base;
-        const shiftedPosition = (originalPosition + shift) % alphabetSize;
+        const shiftedPosition = (originalPosition + shiftVal) % alphabetSize;
         // Handle negative shifts
         newCharCode =
           shiftedPosition >= 0
             ? base + shiftedPosition
             : base + shiftedPosition + alphabetSize;
+
         const shiftedChar = String.fromCharCode(newCharCode);
 
-        explanationText = `'${char}' is an uppercase letter - shift ${shift} places :> '${shiftedChar}'`;
+        explanationsArray.push(
+          `<code>'${char}'</code> (ASCII: ${charCode}) + <code>'${shiftVal}'</code> = <code>'${shiftedChar}'</code> (ciphertext)<br>`
+        );
+
+        ciphertext += shiftedChar;
       } else if (char >= "a" && char <= "z") {
         const base = 97; // ASCII code for 'a'
         const alphabetSize = 26;
         const originalPosition = charCode - base;
-        const shiftedPosition = (originalPosition + shift) % alphabetSize;
+        const shiftedPosition = (originalPosition + shiftVal) % alphabetSize;
         // Handle negative shifts
         newCharCode =
           shiftedPosition >= 0
             ? base + shiftedPosition
             : base + shiftedPosition + alphabetSize;
+
         const shiftedChar = String.fromCharCode(newCharCode);
 
-        explanationText = `'${char}' is a lowercase letter - shift ${shift} places :> '${shiftedChar}'`;
+        explanationsArray.push(
+          `<code>'${char}'</code> (ASCII: ${charCode}) + <code>'${shiftVal}'</code> = <code>'${shiftedChar}'</code> (ciphertext)<br>`
+        );
+
+        ciphertext += shiftedChar;
       } else {
         // Non-alphabetic characters remain unchanged
-        explanationText = `'${char}' is a non-alphabetic character and remains unchanged.`;
+        explanationsArray.push(
+          `<code>'${char}'</code> is a non-alphabetic character and remains unchanged.<br>`
+        );
+
+        ciphertext += char; // Add unchanged character to ciphertext
       }
+    }
 
-      encodedChars.push(String.fromCharCode(newCharCode));
-      explanationsArray.push(explanationText);
-    });
+    // Add final ciphertext explanation
+    explanationsArray.push(
+      `<strong>Final Ciphertext:</strong> <code>${ciphertext}</code><br>`
+    );
 
-    setExplanation(explanationsArray); // Update explanations state
-    return encodedChars.join("");
+    setExplanations(explanationsArray); // Update explanations state
+    return ciphertext; // Return the final ciphertext
   }
 
   function decode(str, shift) {
@@ -83,7 +105,7 @@ export default function CaesarCipher(props) {
         encode={encode}
         decode={decode}
         keyComponentA={3} // Example shift value; adjust as needed
-        explanation={explanation} // Pass explanations to CipherFactory
+        explanation={explanations} // Pass explanations to CipherFactory
       />
     </>
   );

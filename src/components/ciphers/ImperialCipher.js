@@ -1,4 +1,3 @@
-
 // import React from 'react';
 // import CipherFactory from '../../ui/EncryptDecrypt';
 
@@ -77,53 +76,121 @@ import React, { useState } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
 
-import { Header, Description, Example, References } from "../../overviews/ImperialCipherOverview";
+import {
+  Header,
+  Description,
+  Example,
+  References,
+} from "../../overviews/ImperialCipherOverview";
 
-// Import the ImperialEncoder logic
+// Imperial Cipher Map
 const imperialCipherMap = {
-  'A': 'Z', 'B': 'Y', 'C': 'X', 'D': 'W', 'E': 'V', 'F': 'U',
-  'G': 'T', 'H': 'S', 'I': 'R', 'J': 'Q', 'K': 'P', 'L': 'O',
-  'M': 'N', 'N': 'M', 'O': 'L', 'P': 'K', 'Q': 'J', 'R': 'I',
-  'S': 'H', 'T': 'G', 'U': 'F', 'V': 'E', 'W': 'D', 'X': 'C',
-  'Y': 'B', 'Z': 'A'
+  A: "Z",
+  B: "Y",
+  C: "X",
+  D: "W",
+  E: "V",
+  F: "U",
+  G: "T",
+  H: "S",
+  I: "R",
+  J: "Q",
+  K: "P",
+  L: "O",
+  M: "N",
+  N: "M",
+  O: "L",
+  P: "K",
+  Q: "J",
+  R: "I",
+  S: "H",
+  T: "G",
+  U: "F",
+  V: "E",
+  W: "D",
+  X: "C",
+  Y: "B",
+  Z: "A",
 };
 
 const reverseImperialCipherMap = Object.fromEntries(
   Object.entries(imperialCipherMap).map(([key, value]) => [value, key])
 );
 
+// Encoding function with explanation
 const encode = (text) => {
-  let encoded = '';
+  let encoded = "";
+  let explanation = [];
   text = text.toUpperCase();
+
+  explanation.push(
+    `<strong>Encoding Process:</strong><br><code>${text}</code><br>`
+  );
 
   for (let char of text) {
     if (imperialCipherMap[char]) {
       encoded += imperialCipherMap[char];
+      explanation.push(
+        `Character <code>${char}</code> → Encoded as <code>${imperialCipherMap[char]}</code><br>`
+      );
     } else {
       encoded += char; // Keep unknown characters as they are
+      explanation.push(`Character <code>${char}</code> is unchanged.<br>`);
     }
   }
 
-  return encoded;
+  explanation.push(
+    `<strong>Final Encoded Text:</strong> <code>${encoded}</code><br>`
+  );
+  return { encoded, explanation };
 };
 
+// Decoding function with explanation
 const decode = (text) => {
-  let decoded = '';
+  let decoded = "";
+  let explanation = [];
   text = text.toUpperCase();
+
+  explanation.push(
+    `<strong>Decoding Process:</strong><br><code>${text}</code><br>`
+  );
 
   for (let char of text) {
     if (reverseImperialCipherMap[char]) {
       decoded += reverseImperialCipherMap[char];
+      explanation.push(
+        `Character <code>${char}</code> → Decoded as <code>${reverseImperialCipherMap[char]}</code><br>`
+      );
     } else {
       decoded += char; // Keep unknown characters as they are
+      explanation.push(`Character <code>${char}</code> is unchanged.<br>`);
     }
   }
 
-  return decoded;
+  explanation.push(
+    `<strong>Final Decoded Text:</strong> <code>${decoded}</code><br>`
+  );
+  return { decoded, explanation };
 };
 
+// Imperial Cipher Component
 const ImperialCipher = ({ ongetInfo }) => {
   const [showOverview, setShowOverview] = useState(false);
+  const [explanation, setExplanation] = useState([]); // Explanation state
+
+  // Handle encoding
+  const handleEncode = (text) => {
+    const { encoded, explanation } = encode(text);
+    setExplanation(explanation); // Set explanation for encoding
+    return encoded;
+  };
+
+  // Handle decoding
+  const handleDecode = (text) => {
+    const { decoded, explanation } = decode(text);
+    setExplanation(explanation); // Set explanation for decoding
+    return decoded;
+  };
 
   return (
     <>
@@ -139,9 +206,9 @@ const ImperialCipher = ({ ongetInfo }) => {
       <CipherFactory
         title={"Imperial Cipher"}
         setShowOverview={setShowOverview}
-        encode={encode}
-        decode={decode}
-    
+        encode={handleEncode}
+        decode={handleDecode}
+        explanation={explanation} // Pass explanation to CipherFactory
       />
     </>
   );

@@ -44,10 +44,25 @@ const Example = () => {
         The encryption shifts "E" by 4, resulting in "I".
       </p>
       <p>
-        Similarly, continue for the rest of the letters, using the full key:
-        <br />L → S, L → S, O → Y.
+        The third letter of the plaintext "L" (11th letter) is encrypted using
+        the third letter of the key "Y" (24th letter).
+        <br />
+        The encryption shifts "L" by 24, resulting in "J".
       </p>
-      <p>So, the encoded message is: RISSY.</p>
+      <p>
+        The fourth letter of the plaintext "L" (11th letter) is encrypted using
+        the fourth letter of the key "H" (7th letter).
+        <br />
+        The encryption shifts "L" by 7, resulting in "S".
+      </p>
+      <p>
+        The fifth letter of the plaintext "O" (14th letter) is encrypted using
+        the fifth letter of the key "E" (4th letter).
+        <br />
+        The encryption shifts "O" by 4, resulting in "S".
+      </p>
+      <p>So, the encoded message is: RIJSS.</p>
+
       <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
         <Image
           src="https://media.geeksforgeeks.org/wp-content/uploads/20240926174534/Autokey-Cipher-.jpg"

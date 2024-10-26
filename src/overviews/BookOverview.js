@@ -21,7 +21,9 @@ const Description = () => {
 const Example = () => {
   return (
     <div>
-      <p>Let’s encrypt the plaintext message: "HELLO" using the Book Cipher.</p>
+      <p>
+        Let’s encrypt the plaintext message: "ERTERT" using the Book Cipher.
+      </p>
       <p>
         1. Choose a book or text as the key. For example, consider the following
         text:
@@ -34,15 +36,22 @@ const Example = () => {
       <p>2. Identify the position of each letter in the text:</p>
       <p>
         <strong>
-          H → 11 (the first occurrence of H)
+          E → Position: 0.0
           <br />
-          E → 15 (the first occurrence of E)
+          R → Position: 1.3
           <br />
-          L → 20 (the first occurrence of L)
-          <br />O → 28 (the first occurrence of O)
+          T → Position: 0.0
+          <br />
+          E → Position: 0.0
+          <br />
+          R → Position: 1.3
+          <br />T → Position: 0.0
         </strong>
       </p>
-      <p>3. The encrypted message using the positions is: "11 15 20 20 28".</p>
+      <p>
+        3. The encrypted message using the positions is: "0.0 1.3 0.0 0.0 1.3
+        0.0".
+      </p>
     </div>
   );
 };

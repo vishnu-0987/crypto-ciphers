@@ -234,27 +234,34 @@
 import React, { useState, useEffect } from "react";
 import CipherFactory from "../../ui/EncryptDecrypt";
 import CipherOverview from "../../ui/CipherOverview";
-import { Header, Description, Example, References } from "../../overviews/OneTimePadCipherOverview";
+import {
+  Header,
+  Description,
+  Example,
+  References,
+} from "../../overviews/OneTimePadCipherOverview";
 
 export default function OneTimePadCipher() {
   const [showOverview, setShowOverview] = useState(false);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [inputChars, setInputChars] = useState([]);
   const [outputChars, setOutputChars] = useState([]);
-  const [key, setKey] = useState('');
+  const [key, setKey] = useState("");
 
   useEffect(() => {
     showInformation();
   }, []);
 
   const showInformation = () => {
-    console.log("The One-Time Pad Cipher is a symmetric encryption algorithm that uses a randomly generated key as long as the plaintext.");
+    console.log(
+      "The One-Time Pad Cipher is a symmetric encryption algorithm that uses a randomly generated key as long as the plaintext."
+    );
   };
 
   // Function to generate a random key of a given length
   function generateKey(length) {
-    let key = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let key = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       key += characters[randomIndex];
@@ -264,9 +271,10 @@ export default function OneTimePadCipher() {
 
   // Function to perform encryption using the One-Time Pad Cipher
   function encryptOneTimePad(plaintext, key) {
-    let ciphertext = '';
+    let ciphertext = "";
     for (let i = 0; i < plaintext.length; i++) {
-      const charCode = ((plaintext.charCodeAt(i) - 65 + key.charCodeAt(i) - 65) % 26) + 65;
+      const charCode =
+        ((plaintext.charCodeAt(i) - 65 + key.charCodeAt(i) - 65) % 26) + 65;
       ciphertext += String.fromCharCode(charCode);
     }
     return ciphertext;
@@ -274,9 +282,10 @@ export default function OneTimePadCipher() {
 
   // Function to perform decryption using the One-Time Pad Cipher
   function decryptOneTimePad(ciphertext, key) {
-    let plaintext = '';
+    let plaintext = "";
     for (let i = 0; i < ciphertext.length; i++) {
-      let charCode = ((ciphertext.charCodeAt(i) - 65 - (key.charCodeAt(i) - 65)) % 26) + 65;
+      let charCode =
+        ((ciphertext.charCodeAt(i) - 65 - (key.charCodeAt(i) - 65)) % 26) + 65;
       if (charCode < 65) {
         charCode += 26;
       }
@@ -322,4 +331,3 @@ export default function OneTimePadCipher() {
     </>
   );
 }
-

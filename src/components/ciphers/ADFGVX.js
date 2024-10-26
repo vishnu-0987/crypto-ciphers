@@ -12,6 +12,7 @@ import {
 
 export default function ADFGVX() {
   const [showOverview, setShowOverview] = useState(false);
+  const [explanation, setExplanation] = useState([]); // Explanation state
 
   const polybiusSquare = [
     ["A", "D", "F", "G", "V", "X"],
@@ -66,9 +67,22 @@ export default function ADFGVX() {
     let square = createPolybiusSquare(keyword);
     plaintext = plaintext.toUpperCase().replace(/[^A-Z0-9]/g, "");
     let coordinates = [];
+    let explanationsArray = []; // Explanation array for encoding
+
+    explanationsArray.push(
+      `<strong>Plaintext:</strong> <code>${plaintext}</code><br><strong>Keyword:</strong> <code>${keyword}</code><br><strong>Transposition Key:</strong> <code>${transpositionKey}</code><br>`
+    );
 
     for (let char of plaintext) {
-      coordinates.push(...getCoordinates(char, square));
+      const coords = getCoordinates(char, square);
+      coordinates.push(...coords);
+
+      // Add explanation for this step
+      explanationsArray.push(
+        `<code>${char}</code> is converted to coordinates <code>${coords.join(
+          ""
+        )}</code><br>`
+      );
     }
 
     let transposedText = "";
@@ -95,6 +109,11 @@ export default function ADFGVX() {
       }
     }
 
+    explanationsArray.push(
+      `<strong>Final Ciphertext:</strong> <code>${transposedText}</code><br>`
+    );
+
+    setExplanation(explanationsArray);
     return transposedText;
   }
 
@@ -130,12 +149,30 @@ export default function ADFGVX() {
     }
 
     let plaintext = "";
+    let explanationsArray = []; // Explanation array for decoding
+
+    explanationsArray.push(
+      `<strong>Decoding Process:</strong><br>Ciphertext: <code>${ciphertext}</code><br>Keyword: <code>${keyword}</code><br>Transposition Key: <code>${transpositionKey}</code><br>`
+    );
+
     for (let i = 0; i < coordinates.length; i += 2) {
       let row = polybiusSquare[0].indexOf(coordinates[i]);
       let col = polybiusSquare[0].indexOf(coordinates[i + 1]);
       plaintext += square[row][col];
+
+      // Add explanation for this step
+      explanationsArray.push(
+        `<code>${coordinates[i]}${
+          coordinates[i + 1]
+        }</code> maps back to <code>${square[row][col]}</code><br>`
+      );
     }
 
+    explanationsArray.push(
+      `<strong>Final Plaintext:</strong> <code>${plaintext}</code><br>`
+    );
+
+    setExplanation(explanationsArray);
     return plaintext;
   }
 
@@ -155,6 +192,7 @@ export default function ADFGVX() {
         setShowOverview={setShowOverview}
         encode={encode}
         decode={decode}
+        explanation={explanation} // Pass explanation to CipherFactory
         keyComponentA={"STR"}
         keyComponentB={"STR"}
       />

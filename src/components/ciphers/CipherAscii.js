@@ -8,26 +8,44 @@ import {
   References,
 } from "../../overviews/AsciiOverview";
 
-console.log(Header, Description, Example, References);
 export default function CipherAscii() {
-  console.log("Hello Ascii");
   const [showOverview, setShowOverview] = React.useState(false);
-  // Encode a string using ASCII cipher
+  const [explanation, setExplanation] = React.useState([]); // Explanation state
+
+  // Encode a string using ASCII cipher with explanation
   function encode(str) {
-    var result = "";
-    for (var i = 0; i < str.length; i++) {
-      result += str.charCodeAt(i) + "-";
+    let result = "";
+    let explanationsArray = []; // To store explanations
+
+    for (let i = 0; i < str.length; i++) {
+      const charCode = str.charCodeAt(i);
+      result += charCode + "-"; // Append the ASCII value followed by a hyphen
+      explanationsArray.push(
+        `<strong>'${str[i]}'</strong> -> <code>${charCode}</code></br>` // Explanation for each character with strong and code tags
+      );
     }
-    return result;
+
+    setExplanation(explanationsArray); // Set the explanations state
+    return result.slice(0, -1); // Remove the trailing hyphen
   }
 
-  // Decode a string using ASCII cipher
+  // Decode a string using ASCII cipher with explanation
   function decode(str) {
-    var result = "";
-    var elements = str.split("-");
-    for (var i = 0; i < elements.length; i++) {
-      result += String.fromCharCode(elements[i]);
+    let result = "";
+    let explanationsArray = []; // To store explanations
+    const elements = str.split("-"); // Split by hyphen to get ASCII values
+
+    for (let i = 0; i < elements.length; i++) {
+      if (elements[i]) {
+        const char = String.fromCharCode(elements[i]);
+        result += char;
+        explanationsArray.push(
+          `<code>${elements[i]}</code> -> <strong>'${char}'</strong></br>` // Explanation for each ASCII value with strong and code tags
+        );
+      }
     }
+
+    setExplanation(explanationsArray); // Set the explanations state
     return result;
   }
 
@@ -47,6 +65,7 @@ export default function CipherAscii() {
         setShowOverview={setShowOverview}
         encode={encode}
         decode={decode}
+        explanation={explanation} // Pass the explanations to the CipherFactory
       />
     </>
   );

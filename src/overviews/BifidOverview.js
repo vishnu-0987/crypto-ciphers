@@ -23,35 +23,64 @@ const Example = () => {
   return (
     <div>
       <p>
-        Let’s encrypt the plaintext message: "HELLO" using a Polybius square.
+        Let’s encrypt the plaintext message: <strong>"HELLO"</strong> using the
+        keyword: <strong>"KEY"</strong>.
       </p>
       <p>
-        1. Create a Polybius square (5x5 grid) using the alphabet (I and J share
-        a position):
+        1. First, create a Polybius square (5x5 grid) using the keyword "KEY"
+        followed by the remaining alphabet (with I and J sharing a position):
       </p>
       <p>
         <strong>
-          A B C D E<br />
-          F G H I/J K<br />
-          L M N O P<br />
-          Q R S T U<br />V W X Y Z
+          K E Y A B<br />
+          C D F G H<br />
+          I/J L M N O<br />
+          P Q R S T<br />U V W X Z
         </strong>
       </p>
-      <p>2. Convert each letter of "HELLO" to its coordinates:</p>
-      <p>H = (2,3), E = (1,5), L = (3,1), L = (3,1), O = (3,4)</p>
+      <p>
+        2. Convert each letter of "HELLO" to its coordinates using the Polybius
+        square:
+      </p>
+      <p>
+        <code>H = (2, 5)</code>
+        <br />
+        <code>E = (1, 2)</code>
+        <br />
+        <code>L = (3, 2)</code>
+        <br />
+        <code>L = (3, 2)</code>
+        <br />
+        <code>O = (3, 5)</code>
+        <br />
+      </p>
       <p>
         3. Write down the coordinates separately (rows first, then columns):
         <br />
-        Rows: 2 1 3 3 3
+        <code>Rows: 2 1 3 3 3</code>
         <br />
-        Columns: 3 5 1 1 4
+        <code>Columns: 5 2 2 2 5</code>
       </p>
-      <p>4. Combine the two sequences: 2 1 3 3 3 3 5 1 1 4.</p>
+      <p>
+        4. Combine the two sequences into one list of coordinates: <br />
+        <code>2 1 3 3 3 5 2 2 2 5</code>
+      </p>
       <p>
         5. Convert these coordinates back to letters using the Polybius square:
+      </p>
+      <p>
+        <code>(2,5) = H</code>
         <br />
-        (2,3) = H, (1,5) = E, (3,1) = L, (3,1) = L, (3,4) = O
+        <code>(1,2) = E</code>
         <br />
+        <code>(3,2) = L</code>
+        <br />
+        <code>(3,2) = L</code>
+        <br />
+        <code>(3,5) = O</code>
+        <br />
+      </p>
+      <p>
         So, the encrypted message is: <strong>HELLO</strong>.
       </p>
     </div>
